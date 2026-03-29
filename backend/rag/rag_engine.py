@@ -1,4 +1,7 @@
-from typing import List
+from __future__ import annotations
+
+import logging
+from typing import Dict, List
 
 import faiss
 import numpy as np
@@ -7,11 +10,18 @@ from openai import OpenAI
 
 from utils.config import get_settings
 
+logger = logging.getLogger(__name__)
+
 
 class RAGEngine:
+    """
+    Tabular RAG: each row is linearized to text, embedded, indexed with FAISS.
+    Encapsulation: callers use ensure_index + query only (no raw index access).
+    """
+
     def __init__(self) -> None:
-        self._indexes = {}
-        self._rows_text = {}
+        self._indexes: Dict[str, faiss.IndexFlatL2] = {}
+        self._rows_text: Dict[str, List[str]] = {}
         settings = get_settings()
         self._client = (
             OpenAI(api_key=settings.openai_api_key)
@@ -30,8 +40,9 @@ class RAGEngine:
         vectors = [d.embedding for d in resp.data]
         return np.array(vectors).astype("float32")
 
-    def build_index(self, dataset_id: str, df: pd.DataFrame) -> None:
-        if not self._client:
+    def ensure_index(self, dataset_id: str, df: pd.DataFrame) -> None:
+        """Idempotent: builds FAISS index once per dataset when an API key is configured."""
+        if not self._client or dataset_id in self._indexes:
             return
         rows_as_text = [
             ", ".join(f"{col}={row[col]}" for col in df.columns)
@@ -45,14 +56,15 @@ class RAGEngine:
         index.add(embeddings)
         self._indexes[dataset_id] = index
         self._rows_text[dataset_id] = rows_as_text
+        logger.info("RAG index materialized dataset_id=%s rows=%s", dataset_id, len(rows_as_text))
 
     def query(self, dataset_id: str, query: str, k: int = 10) -> List[str]:
         if not self._client or dataset_id not in self._indexes:
             return []
         q_emb = self._embed([query])
-        _, I = self._indexes[dataset_id].search(q_emb, k)
+        _, indices = self._indexes[dataset_id].search(q_emb, k)
         rows = self._rows_text[dataset_id]
-        return [rows[i] for i in I[0] if 0 <= i < len(rows)]
+        return [rows[i] for i in indices[0] if 0 <= i < len(rows)]
 
 
 rag_engine = RAGEngine()

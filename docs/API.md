@@ -7,6 +7,13 @@ All business routes are under **`/api`**. OpenAPI JSON: `/openapi.json`.
 
 No auth is implemented in the current codebase. For production, add API keys, OAuth2, or mutual TLS at the gateway or FastAPI dependency layer.
 
+## Error shape
+
+JSON errors follow FastAPI conventions:
+
+- **404:** `{ "detail": "Dataset not found" }` — unknown `dataset_id` (in-memory session).
+- **400:** `{ "detail": "<message>" }` — validation / business rule (`CopilotValidationError`), e.g. missing column, insufficient rows for forecast.
+
 ---
 
 ## `GET /health`

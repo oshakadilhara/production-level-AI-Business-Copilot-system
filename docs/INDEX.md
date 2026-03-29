@@ -3,7 +3,8 @@
 | Document | Description |
 |----------|-------------|
 | **[RUNNING.md](RUNNING.md)** | **Start here:** run backend + frontend locally or with Docker, prerequisites, troubleshooting |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Components, Mermaid diagram, Docker deployment notes |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System context, Docker deployment, diagrams |
+| [ARCHITECTURE_CODE.md](ARCHITECTURE_CODE.md) | **Backend code layers:** ports, use cases, composition root, dependency rules |
 | [DATA_FLOW.md](DATA_FLOW.md) | Upload → summary → insights → forecast → charts |
 | [API.md](API.md) | REST endpoints, request/response shapes |
 | [MODULE_REFERENCE.md](MODULE_REFERENCE.md) | Backend Python file map |

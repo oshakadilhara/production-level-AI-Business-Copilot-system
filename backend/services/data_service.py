@@ -5,6 +5,7 @@ from typing import Dict, Any, Tuple
 import pandas as pd
 from fastapi import UploadFile
 
+from core.exceptions import DatasetNotFound
 from models.schemas import DatasetMetadata, DatasetSummaryResponse
 from utils.config import ensure_storage_dir
 
@@ -40,7 +41,7 @@ class DataService:
 
     def get_dataframe(self, dataset_id: str) -> pd.DataFrame:
         if dataset_id not in self._dataframes:
-            raise KeyError(f"Unknown dataset_id {dataset_id}")
+            raise DatasetNotFound(dataset_id)
         return self._dataframes[dataset_id]
 
     def get_summary(self, dataset_id: str) -> DatasetSummaryResponse:

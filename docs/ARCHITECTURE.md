@@ -81,8 +81,27 @@ flowchart LR
 
 `docker-compose.yml` runs both; the browser uses **relative** `/api` URLs so nginx can proxy without CORS friction.
 
+## Code layering (clean / hexagonal)
+
+The Python backend separates **presentation** (`api/`), **application use cases** (`application/`), **ports & domain errors** (`core/`), and **adapters** (`services/`, `rag/`, `utils/`). The **composition root** is `infrastructure/bootstrap.py`. Full rules and file map: **[ARCHITECTURE_CODE.md](ARCHITECTURE_CODE.md)**.
+
+```mermaid
+flowchart TB
+    API[api/routes.py]
+    BOOT[infrastructure/bootstrap.py]
+    UC[application/copilot_application.py]
+    CORE[core/ports + exceptions]
+    SVC[services + rag + utils]
+    API --> UC
+    BOOT --> UC
+    BOOT --> SVC
+    UC --> CORE
+    SVC -.implements.- CORE
+```
+
 ## Related documents
 
+- [ARCHITECTURE_CODE.md](ARCHITECTURE_CODE.md) — layers, dependency rules, composition root  
 - [DATA_FLOW.md](DATA_FLOW.md) — request lifecycle  
 - [API.md](API.md) — REST contract  
 - [SCALING.md](SCALING.md) — growth path  

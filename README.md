@@ -8,8 +8,11 @@ Full-stack AI copilot: upload financial or sales spreadsheets, explore summaries
 
 ```
 /backend          FastAPI application
-  /api            HTTP routes
-  /services       Data, ML, charts, insights
+  /api            HTTP (presentation)
+  /application    Use cases (clean architecture)
+  /core           Ports (Protocols) + domain exceptions
+  /infrastructure Composition root (bootstrap)
+  /services       Adapters: data, ML, charts, insights
   /models         Pydantic schemas
   /rag            Embeddings + FAISS retrieval
   /utils          Settings
@@ -128,7 +131,8 @@ Details: [docs/API.md](docs/API.md).
 
 - [Documentation index](docs/INDEX.md)  
 - **[Run the stack (local + Docker)](docs/RUNNING.md)**  
-- [Architecture](docs/ARCHITECTURE.md)  
+- [Architecture (system)](docs/ARCHITECTURE.md)  
+- [Architecture (backend code layers)](docs/ARCHITECTURE_CODE.md)  
 - [Data flow](docs/DATA_FLOW.md)  
 - [API reference](docs/API.md)  
 - [Module reference](docs/MODULE_REFERENCE.md)  
