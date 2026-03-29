@@ -1,4 +1,9 @@
-node_modules
-dist
-.DS_Store
-*.local
+# Monorepo: see root `.gitignore` for full rules.
+# Kept for developers who only open the `frontend/` folder in Git-aware tools.
+
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+.env
+.env.*

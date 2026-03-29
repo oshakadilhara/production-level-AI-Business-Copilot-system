@@ -19,7 +19,7 @@ services:
       dockerfile: docker/Dockerfile.frontend
     container_name: copilot-web
     ports:
-      - "8080:80"
+      - "${WEB_PORT:-9080}:80"
     depends_on:
       - api
 

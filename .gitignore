@@ -1,0 +1,106 @@
+# --- Secrets & local env (public repo: never commit these) ---
+.env
+.env.*
+
+# --- Python / FastAPI ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv/
+venv/
+ENV/
+env/
+
+# Testing / coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# --- Node / Vite / React ---
+node_modules/
+frontend/node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+frontend/dist/
+dist/
+.cache/
+.vite/
+*.tsbuildinfo
+
+# --- App data & uploads ---
+backend_storage/
+*_storage/
+*.sqlite
+*.db
+
+# --- Docker (local overrides; compose file stays tracked) ---
+.docker/
+
+# --- Logs & temp ---
+*.log
+*.tmp
+*.temp
+.tmp/
+tmp/
+temp/
+
+# --- OS ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Editors & IDEs ---
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# VS Code: keep optional shared settings; ignore user-specific
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# Cursor / local AI agent artifacts (optional)
+.cursor/
+
+# --- Jupyter (if you add notebooks later) ---
+.ipynb_checkpoints/
+
+# --- Certificates & keys ---
+*.pem
+*.key
+id_rsa*
