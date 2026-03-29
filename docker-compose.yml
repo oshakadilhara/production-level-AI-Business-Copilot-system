@@ -1,0 +1,27 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: copilot-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      STORAGE_DIR: /data/storage
+    volumes:
+      - copilot_storage:/data/storage
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: copilot-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  copilot_storage:

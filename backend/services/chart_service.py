@@ -11,7 +11,8 @@ class ChartService:
             raise ValueError("Requested columns not in dataset")
 
         x = df[request.x_column].astype(str).tolist()
-        y = df[request.y_column].astype(float).tolist()
+        y = pd.to_numeric(df[request.y_column], errors="coerce").fillna(0.0)
+        y_list = y.astype(float).tolist()
 
         spec = ChartSpec(
             type=request.chart_type,
@@ -20,7 +21,7 @@ class ChartService:
                 "datasets": [
                     {
                         "label": request.y_column,
-                        "data": y,
+                        "data": y_list,
                         "borderColor": "rgba(75, 192, 192, 1)",
                         "backgroundColor": "rgba(75, 192, 192, 0.2)",
                     }
@@ -43,4 +44,3 @@ class ChartService:
 
 
 chart_service = ChartService()
-

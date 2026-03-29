@@ -22,11 +22,7 @@ Upload a CSV or Excel file.
 **Content-Type:** `multipart/form-data`  
 **Field:** `file` (binary)
 
-**Accepted `content_type` values (strict in code):**
-
-- `text/csv`
-- `application/vnd.ms-excel`
-- `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+**Accepted uploads:** CSV or Excel. The API allows common browser `Content-Type` values (`text/csv`, Excel MIME types, `application/octet-stream`, `text/plain`) **or** a filename ending in `.csv`, `.xlsx`, or `.xls`.
 
 **Response:** `DatasetUploadResponse`
 

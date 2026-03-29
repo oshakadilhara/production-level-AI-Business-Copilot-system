@@ -12,16 +12,34 @@ from utils.config import get_settings
 class InsightService:
     def __init__(self) -> None:
         settings = get_settings()
-        self._client = OpenAI(api_key=settings.openai_api_key)
+        self._client = (
+            OpenAI(api_key=settings.openai_api_key)
+            if settings.openai_api_key.strip()
+            else None
+        )
         self._model = settings.openai_model
 
     async def generate_insight(self, request: InsightRequest) -> InsightResponse:
         df = data_service.get_dataframe(request.dataset_id)
+        basic_stats: Dict[str, Any] = df.describe(include="all").to_dict()
+        top_rows = df.head(5).to_dict(orient="records")
+
+        if not self._client:
+            return InsightResponse(
+                answer=(
+                    "Set **OPENAI_API_KEY** on the server to enable AI-generated "
+                    "explanations and semantic retrieval. Summary statistics are still "
+                    "available below and on the Dashboard."
+                ),
+                supporting_facts={
+                    "summary_statistics": basic_stats,
+                    "sample_records": top_rows,
+                },
+            )
+
         if request.dataset_id not in rag_engine._indexes:
             rag_engine.build_index(request.dataset_id, df)
 
-        basic_stats: Dict[str, Any] = df.describe(include="all").to_dict()
-        top_rows = df.head(5).to_dict(orient="records")
         rag_context = rag_engine.query(request.dataset_id, request.question, k=8)
 
         system_prompt = (
@@ -41,16 +59,15 @@ class InsightService:
             "Keep the answer under 6 paragraphs."
         )
 
-        completion = self._client.responses.create(
+        chat = self._client.chat.completions.create(
             model=self._model,
-            reasoning={"effort": "medium"},
-            input=[
+            messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
+            temperature=0.35,
         )
-
-        answer = completion.output_text
+        answer = (chat.choices[0].message.content or "").strip()
 
         return InsightResponse(
             answer=answer,
@@ -62,4 +79,3 @@ class InsightService:
 
 
 insight_service = InsightService()
-

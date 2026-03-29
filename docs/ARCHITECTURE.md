@@ -12,7 +12,7 @@
 ```mermaid
 flowchart LR
     subgraph Client
-        UI[React Frontend]
+        UI[React + Vite SPA]
     end
 
     subgraph API["FastAPI (backend)"]
@@ -73,6 +73,13 @@ flowchart LR
 - Run behind **HTTPS**; never log raw API keys or full row payloads at info level.
 - Validate **file size** and scan uploads; consider antivirus and private bucket storage.
 - **Secrets:** inject `OPENAI_API_KEY` via your orchestrator (Kubernetes secrets, AWS SSM, etc.), not committed `.env`.
+
+## Deployment (Docker)
+
+- **api:** `docker/Dockerfile.backend` — Python 3.12, FastAPI, persisted uploads via `STORAGE_DIR` volume.
+- **web:** `docker/Dockerfile.frontend` — builds the Vite app, serves with **nginx**; `docker/nginx.conf` proxies `/api/` to the API service.
+
+`docker-compose.yml` runs both; the browser uses **relative** `/api` URLs so nginx can proxy without CORS friction.
 
 ## Related documents
 

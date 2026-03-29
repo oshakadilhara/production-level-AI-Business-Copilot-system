@@ -7,3 +7,4 @@ python-multipart==0.0.9
 openai==1.52.2
 faiss-cpu==1.8.0.post1
 pydantic==2.9.2
+pydantic-settings==2.5.2
